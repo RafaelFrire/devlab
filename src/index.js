@@ -1,13 +1,27 @@
-const express = require("express");
-const app = express();
-const port = 3000;
+require('dotenv').config();
 
+const db = require("./db")
+
+const port = 3000;
+const express = require("express");
+
+
+
+const app = express();
 
 app.get('/', (req, res) =>{
-    return res.send("TESTANDO PORTA 3000");
+    return res.json({
+        mensage: "fala que eu te escuto."
+        
+    });
 })
 
+app.get('/users', async (req, res)=>{
+    const users = await db.selectUsers();
+    return res.json(users);
+})
 
 app.listen(port, ()=>{
     console.log("ESCUTANDO");
 });
+

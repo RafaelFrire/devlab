@@ -1,8 +1,15 @@
-import React from 'react'
+import Form from '../components/form/index.tsx'
+
 
 function Signin() {
   return (
-    <div>FAZER LOGIN</div>
+    <>
+
+        <Form title='Login'/>
+        
+    
+    </>
+
   )
 }
 

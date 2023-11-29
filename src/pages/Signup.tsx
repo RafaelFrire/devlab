@@ -1,8 +1,12 @@
 import React from 'react'
-
+import Form from '../components/form/Index'
 function signup() {
   return (
-    <div>CADASTRAR </div>
+
+    <>
+      <Form title='Cadastrar'/>
+    </>
+    
   )
 }
 

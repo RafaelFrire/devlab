@@ -10,7 +10,9 @@ app.use(express.json());
 // recebendo requisições do tipo JSON
 
 
-
+const saltRounds = 10;
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
 
 
 app.get('/', (req, res) =>{
@@ -32,10 +34,11 @@ app.get('/users', async (req, res)=>{
     const users = await db.selectUsers();
     return res.json(users);
 })
-
+// register user
 app.post('/users', async (req, res)=>{
     try{
         await db.registerUser(req.body);
+        
         res.sendStatus(201);
     }catch (error){
         console.error("erro usuário já registrado: ", error);
@@ -82,7 +85,6 @@ app.delete('/courses/:id', async (req, res)=>{
     db.deleteCourse(req.params.id);
     return res.status(204);
 })
-
 
 
 app.listen(port);

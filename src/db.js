@@ -1,4 +1,5 @@
 const { Client } = require("pg")
+const bcrypt = require('bcrypt')
 
 // método connect gera conexão com o banco de dados
 async function connect(){
@@ -47,9 +48,10 @@ async function selectUser(id){
 // método para cadastrar usuários:
 async function registerUser(user){
     const client = await connect();
-    const values =  [user.email, user.senha]
+    const email = user.email;
+    const pwd = await bcrypt.hash(user.senha, 10)
     const sql = "INSERT INTO tbl_usuarios(email, senha) VALUES ($1, $2)";
-    await client.query(sql, values);
+    await client.query(sql, [email,pwd]);
 }
 
 async function deleteUser(id){

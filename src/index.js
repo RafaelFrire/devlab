@@ -2,17 +2,16 @@ require('dotenv').config();
 const db = require("./db")
 
 const port = 3000;
+const cors = require('cors');
 
 const express = require("express");
+
 const app = express();
 
 app.use(express.json());
+app.use(cors('*'));
+
 // recebendo requisições do tipo JSON
-
-
-const saltRounds = 10;
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
-const someOtherPlaintextPassword = 'not_bacon';
 
 
 app.get('/', (req, res) =>{
@@ -67,7 +66,6 @@ app.get('/courses', async (req, res)=>{
 })
 
 
-
 app.post('/courses', async (req, res)=>{
     
     try{
@@ -86,6 +84,34 @@ app.delete('/courses/:id', async (req, res)=>{
     return res.status(204);
 })
 
+
+// rota de autenticação
+
+app.post('/auth/login', async (req, res)=>{
+    const {email, senha} = req.body;
+    console.log('Dados recebidos:',  email, senha);
+
+
+    if(!email){
+        return res.status(422).json({msg:"email obrigatório!"})
+    }
+    if(!senha){
+        return res.status(422).json({msg:"Senha obrigatório!"})
+    }
+
+    try {
+        const authResult = await db.authUser(email, senha);
+        if (authResult) {
+            return res.json(authResult);
+        } else {
+            return res.status(401).json({ msg: "Credenciais inválidas!" });
+        }
+    } catch (error) {
+        console.error("Erro durante a autenticação:", error);
+        return res.status(500).json({ msg: "Erro interno do servidor" });
+    }
+
+});
 
 app.listen(port);
 

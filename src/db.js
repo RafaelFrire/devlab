@@ -1,35 +1,25 @@
-const { Client } = require("pg")
+const { Client, Pool } = require("pg")
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 
 // método connect gera conexão com o banco de dados
+const pool = new Pool({
+    user: "postgres",
+        password: "admin",
+        host: "localhost",
+        port: 5500,
+        database: "devlab" 
+})
+
 async function connect(){
-
-
-    try{
-        if(global.connection){
-            return global.connection
-        }
-        
-        const cliente = new Client({
-            user: "postgres",
-            password: "admin",
-            host: "localhost",
-            port: 5500,
-            database: "devlab" 
-        });
-        await cliente.connect();
-        console.log("Conectado ao BD")
-
-        global.connection = cliente;
-        return cliente;
-       
-    }
-
-    catch(error){
-        console.error("Erro ao conectar ao Banco de dados");
+    try {
+        const client = await pool.connect();
+        console.log("Conectado ao BD");
+        return client;
+    } catch (error) {
+        console.error("Erro ao conectar ao Banco de dados", error);
         throw error;
     }
-    
     
 }
 connect();
@@ -105,7 +95,36 @@ async function registerCourse(data){
     await client.query(sql, [id]);
  }
 
+ async function authUser(email, senha) {
+    const client = await connect();
+  
+    try {
+      const sql = "SELECT * FROM tbl_usuarios WHERE email=$1";
+      const response = await client.query(sql, [email]);
+  
+      if (response.rows.length === 0) {
+        console.log("USUÁRIO NÃO ENCONTRADO");
+        return { error: "Usuário não encontrado" };
+      }
+      const user = response.rows[0];
+      
+      const isPasswordValid = await bcrypt.compare(senha, user.senha);
+      console.log("Senha válida?", isPasswordValid);
 
+
+      if (!isPasswordValid) {
+        console.log("SENHA INVALIDA");
+        return { error: "SENHA INVALIDA" };
+      }
+      
+      const token = jwt.sign({ userId: user.id_usuario, email: user.email }, 'secretpassword', { expiresIn: '1h' });
+  
+      return { token, user: { id: user.id_usuario, email: user.email } };
+    } finally{
+        client.release();
+    }
+  }
+  
 
 module.exports = {
     selectUsers,
@@ -115,5 +134,6 @@ module.exports = {
     getCourses,
     getCourse,
     registerCourse,
-    deleteCourse
+    deleteCourse,
+    authUser
 }

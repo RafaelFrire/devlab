@@ -1,0 +1,25 @@
+
+.container-courses{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    gap: 10px;
+    list-style: none;
+}
+
+ul li{
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+ul li:hover{
+    color: red;
+
+}

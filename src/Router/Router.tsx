@@ -1,22 +1,27 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from '../pages/Home'
-import Signup from "../pages/Signup";
-import Signin from "../pages/Signin";
 
 
-const Private = ({Item}:any) =>{
-    const signed = false;
-    return signed ? <Item />:<Signin />
-}
+import Home from '../pages/Home/Home'
+import Signup from "../pages/signup/Signup";
+import Signin from "../pages/signin/Signin";
+import { PrivateRouter } from "./PrivateRoutes";
+
+
+
+
 
 function Router() 
 {
     return(
         <BrowserRouter>
         <Routes>
-            <Route path="/home" element={<Private item={Home}/>}/>
             <Route path="/" element={<Signin />}/>
-            <Route path="/signup" element={<Signup />}/>
+
+            <Route path="/home" element={<PrivateRouter />}>
+            <Route path="/home" element={<Home />}/>
+            </Route>
+            <Route path="/Signin" element={<Signin />}/>
+            <Route path="/Signup" element={<Signup />}/>
             <Route path="*" element={<Signin />}/>
         </Routes>
         

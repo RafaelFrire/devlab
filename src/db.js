@@ -83,8 +83,8 @@ async function getCourses(){
 
 async function registerCourse(data){
     const client = await connect();
-    const sql = "INSERT INTO tbl_cursos (nome_curso, nome_professor, categoria, descricao) VALUES ($1, $2, $3, $4)" 
-    values = [data.nome_curso, data.nome_professor, data.categoria, data.descricao];
+    const sql = "INSERT INTO tbl_cursos (nome_curso, nome_professor, categoria, descricao, url_imagem) VALUES ($1, $2, $3, $4, $5)" 
+    values = [data.nome_curso, data.nome_professor, data.categoria, data.descricao, data.url_imagem];
     await client.query(sql, values);
 
  }

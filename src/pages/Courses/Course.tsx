@@ -9,10 +9,12 @@ import Header from '../../components/header/Index.tsx'
 
 
 function Course() {
-
+    // data to validation
     const [courses, setCourses] = React.useState([]);
     const [name, setName] = React.useState([]);
     const {signed} = useContext(AuthContext)
+
+   
 
     const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -31,7 +33,6 @@ function Course() {
         }
 
        getData()
-       console.log(courses)
     },[])
 
 // busca por nome
@@ -58,6 +59,30 @@ function Course() {
 
     }
 
+
+// Registrando um novo curso.
+const [NewCourse, setNewCourse] = React.useState({
+  nome_curso: '',
+  nome_professor: '',
+  url_imagem: '',
+  descricao: '',
+  categoria: '',
+});
+    const registerCourse = async () =>{
+      try {
+        // Realizar a requisição POST para cadastrar o novo curso
+        const response = await api.post("/courses", NewCourse);
+  
+        console.log(response.data); // A resposta da API (pode ajustar conforme necessário)
+  
+  
+        // Atualizar a lista de cursos (opcional, dependendo do seu fluxo)
+        const updatedCourses = await api.get("/courses");
+        setCourses(updatedCourses.data);
+      } catch (error) {
+        console.error("Erro ao cadastrar novo curso:", error);
+      }
+    }
   
     if(!signed){
         return <Navigate to="/signin"/>
@@ -87,7 +112,7 @@ function Course() {
         </thead>
 
         {Array.isArray(courses) && courses.map((course, index) => {
-        console.log(course);
+
         return (
             <tbody key={index}>
             <tr>
@@ -113,48 +138,68 @@ function Course() {
         {/* começo do modal */}
         
             <div className='container-modal'>
-              <form className="row g-3 bg-light">
+          <form className="row g-3 bg-light">
         <div className="col-md-56">
-          <label htmlFor="inputEmail4" className="form-label">Email</label>
-          <input type="email" className="form-control" id="inputEmail4"/>
+        <label htmlFor="Professor" className="form-label">Nome do curso</label>
+        <input
+          type="text"
+          className="form-control"
+          id="name"
+          value={NewCourse.nome_curso}
+          onChange={(e) => setNewCourse({ ...NewCourse, nome_curso: e.target.value })}
+        />
         </div>
         <div className="col-md-6">
-          <label htmlFor="inputPassword4" className="form-label">Password</label>
-          <input type="password" className="form-control" id="inputPassword4"/>
-        </div>
-        <div className="col-12">
-          <label htmlFor="inputAddress" className="form-label">Address</label>
-          <input type="text" className="form-control" id="inputAddress" placeholder="1234 Main St"/>
-        </div>
-        <div className="col-12">
-          <label htmlFor="inputAddress2" className="form-label">Address 2</label>
-          <input type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor"/>
+          <label htmlFor="Professor" className="form-label">Professor</label>
+          <input
+          type="text"
+          className="form-control"
+          id="Professor"
+          value={NewCourse.nome_professor}
+          onChange={(e) => setNewCourse({ ...NewCourse, nome_professor: e.target.value })}
+        />
         </div>
         <div className="col-md-6">
-          <label htmlFor="inputCity" className="form-label">City</label>
-          <input type="text" className="form-control" id="inputCity"/>
+          <label htmlFor="imglink" className="form-label">Imagem</label>
+          <input
+          type="text"
+          className="form-control"
+          id="imglink"
+          placeholder="Link URL"
+          value={NewCourse.url_imagem}
+          onChange={(e) => setNewCourse({ ...NewCourse, url_imagem: e.target.value })}
+        />
         </div>
-        <div className="col-md-4">
-          <label htmlFor="inputState" className="form-label">State</label>
-          <select id="inputState" className="form-select">
-            <option selected>Choose...</option>
-            <option>...</option>
+        <div className="col-12 row g-2">
+          <label htmlFor="inputAddress2" className="form-label">Descrição</label>
+          <input
+          type="text"
+          className="form-control"
+          id="descricao"
+          placeholder="Descrição "
+          value={NewCourse.descricao}
+          onChange={(e) => setNewCourse({ ...NewCourse, descricao: e.target.value })}
+        />
+        </div>
+
+        <div className="col-md-5">
+          <label htmlFor="inputState" className="form-label">Categoria</label>
+          <select
+          id="inputState"
+          className="form-select"
+          value={NewCourse.categoria}
+          onChange={(e) => setNewCourse({ ...NewCourse, categoria: e.target.value })}
+        >
+            <option selected>Escolher</option>
+            <option>Desenvolvimento</option>
+            <option>Design</option>
+            <option>Segurança</option>
+            <option>Análise de dados</option>
           </select>
         </div>
-        <div className="col-md-2">
-          <label htmlFor="inputZip" className="form-label">Zip</label>
-          <input type="text" className="form-control" id="inputZip"/>
-        </div>
-        <div className="col-12">
-          <div className="form-check">
-            <input className="form-check-input" type="checkbox" id="gridCheck"/>
-            <label className="form-check-label" htmlFor="gridCheck">
-              Check me out
-            </label>
-          </div>
-        </div>
-        <div className="col-12">
-          <button type="submit" className="btn btn-primary">cadastrar</button>
+       
+        <div className="col-12 p-5 d-flex justify-content">
+          <button type="submit" className="btn btn-primary" onClick={registerCourse}>cadastrar</button>
           <button type="submit" className="btn btn-warning" onClick={closeModal}>cancelar</button>
         </div>
       </form>

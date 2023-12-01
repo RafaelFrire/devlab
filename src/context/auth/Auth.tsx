@@ -53,7 +53,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(response.data);
           api.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`
           localStorage.setItem("@Auth:token", response.data.token)
-          localStorage.setItem("@Auth:user", response.data.user.email)
+          localStorage.setItem("@Auth:user", JSON.stringify({email:response.data.user.email}) );
+
         }
       } catch (error) {
         console.error("Erro durante o login:", error);

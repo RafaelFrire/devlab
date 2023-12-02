@@ -15,6 +15,8 @@
 ```
     yarn run dev
     -- Atenção vale ressaltar que o front-end se encontra na branch "prod".
+    -- email: "admin@teste.com"
+    -- senha: "1234"
 ```
 ## inicializando server-side
 ```

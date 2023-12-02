@@ -46,7 +46,7 @@ inicializando dataBase
 -    React-router-dom + axios
 -    Bootstrap
 
-        **Front-end**
+        **back-end**
 -    NodeJS + Express
 -    bcrypt + jsonwebtoken
 -    cors

@@ -10,15 +10,16 @@
 
 - git clone: "https://github.com/RafaelFrire/devlab.git"
 
+## inicializando client-side
 
-- inicializando client-side
-## Atenção vale ressaltar que o front-end se encontra na branch "prod".
 ```
     yarn run dev
+    -- Atenção vale ressaltar que o front-end se encontra na branch "prod".
 ```
-inicializando server-side
+## inicializando server-side
 ```
     npm start
+    -- Atenção vale ressaltar que o back-end se encontra na branch "master".
 ```
 
 inicializando dataBase 
@@ -46,7 +47,10 @@ inicializando dataBase
 -    React-router-dom + axios
 -    Bootstrap
 
-        **back-end**
+```
+          **back-end**
+```
+    
 -    NodeJS + Express
 -    bcrypt + jsonwebtoken
 -    cors

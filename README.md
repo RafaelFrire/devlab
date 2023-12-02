@@ -40,15 +40,16 @@ inicializando dataBase
 - **PostgreeSQL - Pgadmin 4**
 
 ### (📋) Tecnologias Utilizadas
-
-       **Front-end**
+```
+     front-end
+```
 -    React + Typescript
 -    hookform + yup
 -    React-router-dom + axios
 -    Bootstrap
 
 ```
-          **back-end**
+     back-end
 ```
     
 -    NodeJS + Express

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from '@hookform/resolvers/yup';
-import { object, string } from "yup"
+import { boolean, object, string } from "yup"
 import { AuthContext } from "../../context/auth/Auth";
 // navegação
 import { Navigate } from "react-router-dom";
@@ -19,6 +19,14 @@ function Course() {
     const [courses, setCourses] = React.useState([]);
     const [name, setName] = React.useState([]);
     const {signed} = useContext(AuthContext)
+    const [NewCourse, setNewCourse] = React.useState({
+      nome_curso: '',
+      nome_professor: '',
+      url_imagem: '',
+      descricao: '',
+      categoria: '',
+      status:''
+    });
 
     const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -28,6 +36,7 @@ function Course() {
       professor:string().required("campo obrigatório.."),
       descricao:string().required("campo obrigatório..").max(200, "Tamanho máximo de 200 caracteres"),
       categoria:string().required("Campo obrigatório."),
+      status:boolean().required("Campo obrigatório"),
       imglink:string().required("insira uma imagem.")
     })
 
@@ -84,13 +93,7 @@ function Course() {
 
 
 // Registrando um novo curso.
-const [NewCourse, setNewCourse] = React.useState({
-  nome_curso: '',
-  nome_professor: '',
-  url_imagem: '',
-  descricao: '',
-  categoria: '',
-});
+
     const registerCourse = async () =>{
       try {
         // Realizar a requisição POST para cadastrar o novo curso
@@ -127,7 +130,8 @@ const [NewCourse, setNewCourse] = React.useState({
             <th scope="col">Professor</th>
             <th scope="col">categoria</th>
             <th scope="col">descrição</th>
-            <th scope="col-5 bg-danger">ação</th>
+            <th scope="col">ação</th>
+            <th scope="col">status</th>
             </tr>
         </thead>
 
@@ -142,7 +146,7 @@ const [NewCourse, setNewCourse] = React.useState({
                 <td>{course.categoria}</td>
                 <td>{course.descricao}</td>
                 <td>editar</td>
-                <td>desativar</td>
+                <td>{course.status ? "Ativado" : "desativado"}</td>
             </tr>
             </tbody>
         );
@@ -211,7 +215,7 @@ const [NewCourse, setNewCourse] = React.useState({
          <span className='error'>{errors.descricao?.message}</span>
         </div>
 
-        <div className="col-md-5">
+        <div className="col-md-6">
           <label htmlFor="inputState" className="form-label">Categoria</label>
           <select
           id="categoria"
@@ -220,11 +224,26 @@ const [NewCourse, setNewCourse] = React.useState({
           {...register("categoria")}
           onChange={(e) => setNewCourse({ ...NewCourse, categoria: e.target.value })}
         >
-            <option selected>Escolher</option>
+            <option value="" disabled>Escolher</option>
             <option>Desenvolvimento</option>
             <option>Design</option>
             <option>Segurança</option>
             <option>Análise de dados</option>
+          </select>
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="inputState" className="form-label">Status</label>
+          <select
+          id="status"
+          className="form-select"
+          value={NewCourse.status}
+          {...register("status")}
+          onChange={(e) => setNewCourse({ ...NewCourse, status: e.target.value === 'Ativado' })}
+        >
+            <option value="" disabled>Escolher</option>
+            <option>Ativado</option>
+            <option>Desativado</option>
           </select>
         </div>
        

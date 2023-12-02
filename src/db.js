@@ -83,11 +83,50 @@ async function getCourses(){
 
 async function registerCourse(data){
     const client = await connect();
-    const sql = "INSERT INTO tbl_cursos (nome_curso, nome_professor, categoria, descricao, url_imagem) VALUES ($1, $2, $3, $4, $5)" 
-    values = [data.nome_curso, data.nome_professor, data.categoria, data.descricao, data.url_imagem];
+    const sql = "INSERT INTO tbl_cursos (nome_curso, nome_professor, categoria, descricao, url_imagem, status) VALUES ($1, $2, $3, $4, $5, $6)" 
+    const values = [data.nome_curso, data.nome_professor, data.categoria, data.descricao, data.url_imagem, data.status];
     await client.query(sql, values);
-
+    
  }
+
+
+ async function updateCourse(id, data){
+    const client = await connect();
+    if (data.status === 'Ativado') {
+        data.status = true;
+      } else if (data.status === 'Desativado') {
+        data.status = false;
+      }
+    try {
+        const sql = `
+          UPDATE tbl_cursos 
+          SET nome_curso = $1, 
+              nome_professor = $2, 
+              categoria = $3, 
+              descricao = $4, 
+              url_imagem = $5, 
+              status = $6
+          WHERE id = $7
+        `;
+        const values = [
+          data.nome_curso,
+          data.nome_professor,
+          data.categoria,
+          data.descricao,
+          data.url_imagem,
+          data.status,
+          id
+        ];
+        await client.query(sql, values);
+        console.log("Curso atualizado com sucesso!");
+      } catch (error) {
+        console.error("Erro ao atualizar o curso", error);
+        throw error;  // Rejogue o erro para tratamento em um nível superior
+      }
+
+    }
+    
+ 
 
  async function deleteCourse(id){
     const client = await connect();
@@ -135,5 +174,6 @@ module.exports = {
     getCourse,
     registerCourse,
     deleteCourse,
-    authUser
+    authUser,
+    updateCourse
 }

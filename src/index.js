@@ -5,13 +5,15 @@ const port = 3000;
 const cors = require('cors');
 
 const express = require("express");
+const bodyParser = require('body-parser');
 
 const app = express();
 
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors('*'));
 
-// recebendo requisições do tipo JSON
+
 
 
 app.get('/', (req, res) =>{
@@ -55,10 +57,18 @@ app.delete('/users/:id', async(req, res)=>{
 
 // ROTA CURSOS
 
+app.patch('/courses/:id', async (req, res)=>{
+   const id = req.params.id;
+   await db.updateCourse(id, req.body);
+   console.log(req.body);
+})
+
 app.get('/courses/:id', async (req, res)=>{
     const course = await db.getCourse(req.params.id)
     return res.json(course);
 })
+
+
 
 app.get('/courses', async (req, res)=>{
     const courses = await db.getCourses();

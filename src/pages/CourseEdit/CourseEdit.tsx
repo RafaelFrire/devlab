@@ -6,54 +6,58 @@ import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from '@hookform/resolvers/yup';
-import { boolean, object, string } from "yup"
+import { bool, boolean, object, string } from "yup"
 
 function CourseEdit() {
 
   const { id } = useParams();
   
-  const [course, setCourse] = useState([]);
+  const [course, setCourse] = useState({
+    nome_curso: '',
+    nome_professor: '',
+    url_imagem: '',
+    descricao: '',
+    categoria: '',
+    status:'',
+  });
   const [NewCourse, setNewCourse] = React.useState({
     nome_curso: '',
     nome_professor: '',
     url_imagem: '',
     descricao: '',
     categoria: '',
-    status:''
+    status: '',
   });
 
   const schema = object({
-    nome_curso:string().required("campo obrigatório."),
-    professor:string().required("campo obrigatório.."),
-    descricao:string().required("campo obrigatório..").max(200, "Tamanho máximo de 200 caracteres"),
-    categoria:string().required("Campo obrigatório."),
-    status:boolean().required("Campo obrigatório"),
-    imglink:string().required("insira uma imagem.")
+    nome_curso:string(),
+    professor:string(),
+    descricao:string().max(200),
+    categoria:string(),
+    status:string(),
+    imglink:string()
   })
   const {register,
     handleSubmit:onSubmit,
      watch,
       formState: {errors}} = useForm({resolver: yupResolver(schema)})
  
-
+    // realizando um get dos valores do curso.
   useEffect(() =>{
     const getData = async () =>{
         const response = await  api.get(`/courses/${id}`)
-        setCourse(response.data)
+        setCourse(response.data[0])
+        setNewCourse(response.data[0])
     }
     getData()
   }, [id])
 
-  const handleSubmit = (data:any) =>{
-    console.log(data)
-  }
-
-
-
   const updateCourse = async () => {
     try {
       // Faça a chamada PATCH para atualizar o curso
+      console.log('Dados antes da requisição:', NewCourse);
       await api.patch(`/courses/${id}`, NewCourse);
+
       console.log('Curso atualizado com sucesso!', NewCourse);
       // Redireciona para a página de detalhes do curso ou outra página desejada
     } catch (error) {
@@ -61,7 +65,18 @@ function CourseEdit() {
     }
   };
 
-
+    const handleSubmit = (data: any) => {
+      if (data.status === 'Ativado') {
+        data.status = true;
+      } else if (data.status === 'Desativado') {
+        data.status = false;
+      }
+      setNewCourse(data);
+      updateCourse();
+    };
+    
+  
+  
   return (
     <div className='bg-transparent'>
         <Header />
@@ -140,20 +155,20 @@ function CourseEdit() {
                 <div className="col-md-6">
                 <label htmlFor="inputState" className="form-label">Status</label>
                 <select
-                id="status"
-                className="form-select"
-                value={NewCourse.status}
-                {...register("status")}
-                onChange={(e) => setNewCourse({ ...NewCourse, status: e.target.value === 'Ativado' })}
-                >
+                     id="status"
+                     className="form-select"
+                     value={NewCourse.status}
+                     {...register("status")}
+                     onChange={(e) => setNewCourse({ ...NewCourse, status: e.target.value })}
+                   >
                   <option value="" disabled>Escolher</option>
-                  <option>Ativado</option>
-                  <option>Desativado</option>
+                  <option value="Ativado">Ativado</option>
+                  <option value="Desativado">Desativado</option>
                 </select>
                 </div>
 
                 <div className="col-12 p-5 d-flex justify-content">
-                <button type="submit" className="btn btn-primary" onClick={updateCourse}>cadastrar</button>
+                <button type="submit" className="btn btn-primary">Atualiar</button>
                 </div>
                 </form>
     </div>

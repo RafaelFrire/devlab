@@ -10,7 +10,7 @@ function Home() {
   useEffect(() =>{
     const getData = async () =>{
       const response = await api.get('/courses')
-      await setData(response.data)
+      setData(response.data)
     
     }
 

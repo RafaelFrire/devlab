@@ -4,6 +4,14 @@ table{
     margin: 0 auto;
 }
 
+
+svg{
+    cursor: pointer;
+    color: black;
+}
+svg:hover{
+    color: red;
+}
 #pesquisa{
 
     margin: 0 auto;

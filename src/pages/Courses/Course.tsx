@@ -4,11 +4,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { boolean, object, string } from "yup"
 import { AuthContext } from "../../context/auth/Auth";
 // navegação
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Modal from '../../components/Modal/Modal.tsx'
 import { api } from '../../services/api.tsx'
 import './index.css'
 import Header from '../../components/header/Index.tsx'
+import SvgEdit from '../../components/icons/SvgEdit.tsx';
 
 
 
@@ -76,8 +77,10 @@ function Course() {
             const allCourses = response.data;
         
             // Filtra os cursos com base no nome
-            const filteredCourses = allCourses.filter(course => course.nome_curso === name);
-        
+            const filteredCourses = allCourses.filter(course => 
+              course.nome_curso.toLowerCase().startsWith(name.toLowerCase())
+            );
+                    
             // Atualiza o estado apenas se houver cursos filtrados
             if (filteredCourses.length > 0) {
               setCourses(filteredCourses);
@@ -137,6 +140,7 @@ function Course() {
 
         {Array.isArray(courses) && courses.map((course, index) => {
 
+          console.log(course, index)
         return (
             <tbody key={index}>
             <tr>
@@ -145,7 +149,7 @@ function Course() {
                 <td>{course.nome_professor}</td>
                 <td>{course.categoria}</td>
                 <td>{course.descricao}</td>
-                <td>editar</td>
+                <td><Link to={`/cursos/${course.id}`}><SvgEdit /></Link></td>
                 <td>{course.status ? "Ativado" : "desativado"}</td>
             </tr>
             </tbody>

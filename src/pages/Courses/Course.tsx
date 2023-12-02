@@ -37,7 +37,7 @@ function Course() {
       professor:string().required("campo obrigatório.."),
       descricao:string().required("campo obrigatório..").max(200, "Tamanho máximo de 200 caracteres"),
       categoria:string().required("Campo obrigatório."),
-      status:boolean().required("Campo obrigatório"),
+      status:string().required("Campo obrigatório"),
       imglink:string().required("insira uma imagem.")
     })
 
@@ -46,8 +46,8 @@ function Course() {
         watch,
          formState: {errors}} = useForm({resolver: yupResolver(schema)})
 
-    const handleSubmit = (data:any) =>{
-      console.log(data)
+    const handleSubmit = () =>{
+      registerCourse()
     }
 
     
@@ -105,6 +105,7 @@ function Course() {
         // Atualizar a lista de cursos do grid.
         const updatedCourses = await api.get("/courses");
         setCourses(updatedCourses.data);
+        closeModal()
       } catch (error) {
         console.error("Erro ao cadastrar novo curso:", error);
       }
@@ -140,7 +141,6 @@ function Course() {
 
         {Array.isArray(courses) && courses.map((course, index) => {
 
-          console.log(course, index)
         return (
             <tbody key={index}>
             <tr>
@@ -243,7 +243,7 @@ function Course() {
           className="form-select"
           value={NewCourse.status}
           {...register("status")}
-          onChange={(e) => setNewCourse({ ...NewCourse, status: e.target.value === 'Ativado' })}
+          onChange={(e) => setNewCourse({ ...NewCourse, status: e.target.value})}
         >
             <option value="" disabled>Escolher</option>
             <option>Ativado</option>
@@ -252,7 +252,7 @@ function Course() {
         </div>
        
         <div className="col-12 p-5 d-flex justify-content">
-          <button type="submit" className="btn btn-primary" onClick={registerCourse}>cadastrar</button>
+          <button type="submit" className="btn btn-primary">cadastrar</button>
           <button type="submit" className="btn btn-warning" onClick={closeModal}>cancelar</button>
         </div>
       </form>

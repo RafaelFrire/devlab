@@ -40,13 +40,13 @@ inicializando dataBase
 
 ### (📋) Tecnologias Utilizadas
 
--       **Front-end**
+       **Front-end**
 -    React + Typescript
 -    hookform + yup
 -    React-router-dom + axios
 -    Bootstrap
 
--       **Back-end**
+        **Front-end**
 -    NodeJS + Express
 -    bcrypt + jsonwebtoken
 -    cors
@@ -55,7 +55,7 @@ inicializando dataBase
 
 ## ✒️ Denvolvedor
 
-* Rafael Freire de Sousa
+ Rafael Freire de Sousa
 
 
 ## 🎁 Expressões de gratidão

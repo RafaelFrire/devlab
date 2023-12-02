@@ -29,7 +29,7 @@ inicializando dataBase
 --       host: "localhost",
 --       port: 5500,
 --       database: "devlab" 
--- dump download: "https://drive.google.com/drive/folders/1KWbg3t2iJjk9BsXwfNyhKsY8tMIXFWO-"
+--       dump download: "https://drive.google.com/drive/folders/1KWbg3t2iJjk9BsXwfNyhKsY8tMIXFWO-"
 
 ```
 

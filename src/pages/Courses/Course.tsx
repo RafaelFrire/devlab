@@ -1,10 +1,16 @@
 import React, { useContext } from 'react'
+import { useForm, SubmitHandler } from "react-hook-form"
+import { yupResolver } from '@hookform/resolvers/yup';
+import { object, string } from "yup"
 import { AuthContext } from "../../context/auth/Auth";
+// navegação
 import { Navigate } from "react-router-dom";
 import Modal from '../../components/Modal/Modal.tsx'
 import { api } from '../../services/api.tsx'
 import './index.css'
 import Header from '../../components/header/Index.tsx'
+
+
 
 
 
@@ -14,10 +20,28 @@ function Course() {
     const [name, setName] = React.useState([]);
     const {signed} = useContext(AuthContext)
 
-   
-
     const [isModalOpen, setIsModalOpen] = React.useState(false);
 
+
+    const schema = object({
+      nome_curso:string().required("campo obrigatório."),
+      professor:string().required("campo obrigatório.."),
+      descricao:string().required("campo obrigatório..").max(200, "Tamanho máximo de 200 caracteres"),
+      categoria:string().required("Campo obrigatório."),
+      imglink:string().required("insira uma imagem.")
+    })
+
+    const {register,
+       handleSubmit:onSubmit,
+        watch,
+         formState: {errors}} = useForm({resolver: yupResolver(schema)})
+
+    const handleSubmit = (data:any) =>{
+      console.log(data)
+    }
+
+    
+// Modal de cadastro de curso
     const openModal = () => {
       setIsModalOpen(true);
     };
@@ -35,8 +59,7 @@ function Course() {
        getData()
     },[])
 
-// busca por nome
-
+// buscando curso pelo seu nome
     const getCourseByName = async () =>{
       
         try {
@@ -73,10 +96,7 @@ const [NewCourse, setNewCourse] = React.useState({
         // Realizar a requisição POST para cadastrar o novo curso
         const response = await api.post("/courses", NewCourse);
   
-        console.log(response.data); // A resposta da API (pode ajustar conforme necessário)
-  
-  
-        // Atualizar a lista de cursos (opcional, dependendo do seu fluxo)
+        // Atualizar a lista de cursos do grid.
         const updatedCourses = await api.get("/courses");
         setCourses(updatedCourses.data);
       } catch (error) {
@@ -138,26 +158,31 @@ const [NewCourse, setNewCourse] = React.useState({
         {/* começo do modal */}
         
             <div className='container-modal'>
-          <form className="row g-3 bg-light">
+
+          <form className="row g-3 bg-light" onSubmit={onSubmit(handleSubmit)} >
         <div className="col-md-56">
         <label htmlFor="Professor" className="form-label">Nome do curso</label>
         <input
           type="text"
           className="form-control"
-          id="name"
+          id="nome_curso"
           value={NewCourse.nome_curso}
+          {...register("nome_curso")}
           onChange={(e) => setNewCourse({ ...NewCourse, nome_curso: e.target.value })}
         />
+        <span className='error'>{errors.nome_curso?.message}</span>
         </div>
         <div className="col-md-6">
           <label htmlFor="Professor" className="form-label">Professor</label>
           <input
           type="text"
           className="form-control"
-          id="Professor"
+          id="professor"
           value={NewCourse.nome_professor}
+          {...register("professor")}
           onChange={(e) => setNewCourse({ ...NewCourse, nome_professor: e.target.value })}
         />
+         <span className='error'>{errors.professor?.message}</span>
         </div>
         <div className="col-md-6">
           <label htmlFor="imglink" className="form-label">Imagem</label>
@@ -167,8 +192,10 @@ const [NewCourse, setNewCourse] = React.useState({
           id="imglink"
           placeholder="Link URL"
           value={NewCourse.url_imagem}
+          {...register("imglink")}
           onChange={(e) => setNewCourse({ ...NewCourse, url_imagem: e.target.value })}
         />
+         <span className='error'>{errors.imglink?.message}</span>
         </div>
         <div className="col-12 row g-2">
           <label htmlFor="inputAddress2" className="form-label">Descrição</label>
@@ -178,16 +205,19 @@ const [NewCourse, setNewCourse] = React.useState({
           id="descricao"
           placeholder="Descrição "
           value={NewCourse.descricao}
+          {...register("descricao")}
           onChange={(e) => setNewCourse({ ...NewCourse, descricao: e.target.value })}
         />
+         <span className='error'>{errors.descricao?.message}</span>
         </div>
 
         <div className="col-md-5">
           <label htmlFor="inputState" className="form-label">Categoria</label>
           <select
-          id="inputState"
+          id="categoria"
           className="form-select"
           value={NewCourse.categoria}
+          {...register("categoria")}
           onChange={(e) => setNewCourse({ ...NewCourse, categoria: e.target.value })}
         >
             <option selected>Escolher</option>

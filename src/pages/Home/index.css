@@ -2,8 +2,11 @@
 .container-courses{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
     flex-wrap: wrap;
+    gap: 30px;
 }
 
 ul{

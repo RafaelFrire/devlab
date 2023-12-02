@@ -1,4 +1,5 @@
 import React, { SyntheticEvent, useContext } from "react";
+
 import './index.css';
 import { AuthContext } from "../../context/auth/Auth";
 import { Navigate } from "react-router-dom";
@@ -38,7 +39,7 @@ else{
   return (
   <div className='main-container bg-light'>
         <form onSubmit={handleSignIn}>
-            <h1>Login</h1>
+            <h1 className="text">Login</h1>
             <div className="mb-3">
             <label htmlFor="InputEmail" className="form-label">Endereço de E-mail</label>
             <input type="email"

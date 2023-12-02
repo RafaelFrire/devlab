@@ -18,26 +18,20 @@ function Home() {
   },[])
 
   return (
-    <div className='container'>
+    <div className='container '>
       <Header />
-      <h1>Home</h1>
+      <h1 className='text-center p-5 text-bold'>Home</h1>
       <div className="container-courses ">
       {Array.isArray(data) && data.map((item, index) =>{
         // console.log(item)
         return(
-          
-          <div className="row" key={item.id}>
+          <div className="row p-8 " key={item.id}>
             <div className="col-5">
             <div className="card" style={{width: "20rem"}}>
-          <img src={item.url_imagem} className="card-img-top" alt="..."  style={{ width: "100%", height: "250px" }}/>
+          <img src={item.url_imagem} className="card-img-top" alt="..."  style={{ width: "100%", height: "200px" }}/>
             <div className="card-body">
-            <h5 className="card-title text-center">{item.nome_curso}</h5>
-            <p className="card-text">{item.descricao}</p>
-            <div className='low-card'>
-                <p><strong>professor:</strong>{item.nome_professor}</p>
-                <label id='categoria_label'>categoria: {item.categoria}</label>
-            </div>
-
+            <h5 className="card-title text-center"><strong>{item.nome_curso}</strong></h5>
+            <p className="card-text p-2">{item.descricao}</p>
                 </div>
                </div> 
               </div>

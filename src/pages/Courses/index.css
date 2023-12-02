@@ -8,3 +8,18 @@ table{
 
     margin: 0 auto;
 }
+
+.error{
+    font-size: 1.2rem;
+    color: red;
+    margin: 10px;
+}
+
+
+@media (max-width: 600px){
+    input#input_busca_curso{
+        width: 300px;
+        margin: 0px auto;
+    }
+
+}

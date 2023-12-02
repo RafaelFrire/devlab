@@ -6,7 +6,7 @@
 
 ## 🚀 Começando
 
-- Clonando o projeto
+# Clonando o projeto
 
 - git clone: "https://github.com/RafaelFrire/devlab.git"
 
